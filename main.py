@@ -93,10 +93,24 @@ def analyze(resume: UploadFile = File(...), job_description: str = Form("")):
     if jd:
         text = f"{text}\n\n--- TARGET JOB DESCRIPTION (also judge how well the resume matches it) ---\n{jd}"
 
-    try:
-        result = review_resume(text)
-    except RuntimeError as e:
-        raise HTTPException(status_code=502, detail=str(e))
+    # The model sometimes returns an empty reply. Retry a few times before giving up.
+    result = None
+    last_error = ""
+    for _ in range(3):
+        try:
+            result = review_resume(text)
+            break
+        except RuntimeError as e:
+            last_error = str(e)
+            if "empty response" not in last_error.lower():
+                break
+    if result is None:
+        raise HTTPException(
+            status_code=502,
+            detail="The AI did not respond this time. Please click Analyze again."
+            if "empty response" in last_error.lower()
+            else last_error,
+        )
 
     score = _score_100(result.get("overall_score", ""))
     headline, summary = _headline(score)
