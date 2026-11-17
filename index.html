@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ResumeAI – Free AI Resume Checker</title>
+<meta name="description" content="Upload your resume and get a free AI score, strengths and improvement tips in 30 seconds.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--pri:#4F46E5;--pri-d:#4338CA;--acc:#10B981;--warn:#D97706;--bg:#F8FAFC;--ink:#0F172A;--mute:#64748B;--line:#E2E8F0;--card:#fff}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;background:#fff;color:var(--ink);line-height:1.5}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+nav{border-bottom:1px solid var(--line);background:#fff}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:88px}
+.logo{display:flex;align-items:center;gap:12px;font-weight:700;font-size:24px}
+.logo i{width:38px;height:38px;border-radius:10px;background:var(--pri);display:grid;place-items:center}
+.logo svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2}
+nav ul{display:flex;gap:40px;list-style:none;font-size:14px;font-weight:500}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--pri);color:#fff;border:0;border-radius:12px;padding:16px 28px;font:600 16px Inter,sans-serif;cursor:pointer;transition:background .15s}
+.btn:hover{background:var(--pri-d)}
+.btn:disabled{opacity:.6;cursor:wait}
+.btn.sm{padding:10px 24px;font-size:14px;border-radius:10px}
+.btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2}
+.hero{background:var(--bg);padding:56px 0 72px}
+.hero .wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center}
+.chip{display:inline-block;background:#E8EAFD;color:var(--pri);font-size:11px;font-weight:600;padding:8px 16px;border-radius:99px;margin-bottom:24px}
+h1{font-size:clamp(38px,5.2vw,60px);line-height:1.08;font-weight:800;letter-spacing:-.02em}
+.hero p.sub{font-size:19px;color:var(--mute);margin:28px 0 40px}
+.note{font-size:13px;color:var(--mute);margin-top:18px}
+.panel{background:#EEF0FE;border-radius:28px;padding:32px}
+.rep{background:#fff;border-radius:18px;padding:24px;box-shadow:0 12px 32px rgba(15,23,42,.08)}
+.rep h4{font-size:17px;font-weight:600;margin-bottom:6px}
+.tag{font-size:12px;background:#D1FAE5;color:#047857;padding:4px 12px;border-radius:99px;font-weight:500}
+.rep .top{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--mute);margin-bottom:20px}
+.ring{display:flex;gap:24px;align-items:center;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.ring .dial{position:relative;width:140px;height:140px;flex:none}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:9;stroke-linecap:round}
+.ring .num{position:absolute;inset:0;display:grid;place-content:center;text-align:center;font-size:42px;font-weight:700;line-height:1}
+.ring .num small{font-size:13px;font-weight:400;color:var(--mute);margin-top:6px}
+.ring h5{font-size:20px;font-weight:600}.ring p{font-size:14px;color:var(--mute);margin:4px 0 10px}
+.bars{padding-top:18px;display:grid;gap:12px;font-size:13px;color:var(--mute)}
+.bars div{display:grid;grid-template-columns:130px 1fr 28px;gap:12px;align-items:center}
+.bars b{color:var(--ink);font-weight:600}
+.bar{height:5px;background:var(--line);border-radius:9px;overflow:hidden}.bar span{display:block;height:100%;background:var(--pri);border-radius:9px}
+section.main{padding:64px 0 72px}
+.eyebrow{font-size:12px;font-weight:600;color:var(--pri)}
+h2{font-size:clamp(30px,4vw,40px);font-weight:800;letter-spacing:-.01em;margin:10px 0 12px}
+.lead{color:var(--mute);margin-bottom:40px}
+.grid{display:grid;grid-template-columns:394px 1fr;gap:24px;align-items:start}
+.box{border:1px solid var(--line);border-radius:16px;padding:24px;background:#fff}
+.box h3{font-size:19px;font-weight:600}.box .s{font-size:13px;color:var(--mute);margin:4px 0 20px}
+.drop{border:2px dashed #A5B4FC;border-radius:14px;padding:28px 16px;text-align:center;background:#FAFAFF;transition:background .15s,border-color .15s}
+.drop.over{background:#EEF0FE;border-color:var(--pri)}
+.drop .ic{width:48px;height:48px;border-radius:12px;background:#E8EAFD;display:grid;place-items:center;margin:0 auto 14px}
+.drop .ic svg{width:20px;height:20px;stroke:var(--pri);fill:none;stroke-width:2}
+.drop b{display:block;font-weight:600}.drop small{display:block;font-size:12px;color:var(--mute)}
+.drop .btn{margin:14px 0}
+.fname{font-size:13px;font-weight:600;color:var(--pri);word-break:break-all;margin-bottom:6px;min-height:20px}
+.opt{display:flex;justify-content:space-between;align-items:center;margin-top:24px}
+.opt h4{font-size:15px;font-weight:600}.opt span{font-size:10px;background:#E2E8F0;color:var(--mute);padding:5px 12px;border-radius:6px;font-weight:600}
+textarea{width:100%;min-height:110px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font:14px Inter,sans-serif;resize:vertical;margin-top:10px}
+.priv{font-size:12px;color:var(--mute);margin-top:16px}
+#go{width:100%;justify-content:center;margin-top:18px}
+#msg{font-size:13px;margin-top:12px;min-height:18px}
+#msg.err{color:#B91C1C}#msg.ok{color:var(--mute)}
+.res-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.res-h h3{font-size:18px;font-weight:600}
+.badge{font-size:10px;font-weight:600;background:#E2E8F0;color:var(--mute);padding:7px 14px;border-radius:6px}
+.score{display:flex;gap:40px;align-items:center}
+.score .big{font-size:56px;font-weight:700;color:var(--pri);line-height:1}.score .big small{font-size:15px;font-weight:400;color:var(--mute);margin-left:12px}
+.score h4{font-size:22px;font-weight:600}.score p{font-size:14px;color:var(--mute);margin:4px 0 14px}
+.score .bar{height:8px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.list h4{font-size:17px;font-weight:600;margin-bottom:14px}
+.list ul{list-style:none;display:grid;gap:12px;font-size:14px}
+.list li{padding-left:18px;position:relative}
+.list li:before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--acc)}
+.list.w li:before{background:var(--warn)}
+.sug{display:grid;gap:14px}
+.sug div{display:flex;gap:12px}
+.sug i{flex:none;width:22px;height:22px;border-radius:6px;background:#E8EAFD;color:var(--pri);font:600 11px/22px Inter;text-align:center}
+.sug b{display:block;font-size:14px;font-weight:600}.sug span{font-size:12px;color:var(--mute)}
+.steps{background:var(--bg);padding:72px 0;text-align:center}
+.steps .row{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:48px}
+.steps .ic{width:52px;height:52px;border-radius:14px;background:#E8EAFD;margin:0 auto 18px;display:grid;place-items:center}
+.steps .ic svg{width:22px;height:22px;stroke:var(--pri);fill:none;stroke-width:2}
+.steps h3{font-size:19px;font-weight:600;margin-bottom:8px}.steps p{font-size:14px;color:var(--mute)}
+footer{background:#111827;color:#fff;padding:40px 0 24px}
+footer .top{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;padding-bottom:32px;border-bottom:1px solid #243047}
+footer .logo{font-size:22px;margin-bottom:14px}
+footer p{font-size:17px}footer .m{font-size:13px;color:#94A3B8;margin-top:6px}
+footer .links{display:flex;gap:12px;flex-wrap:wrap}
+footer .links a{border:1px solid #2D3A52;background:#182136;border-radius:10px;padding:12px 18px;font-size:13px;font-weight:500}
+footer .links a{display:inline-flex;align-items:center;gap:10px}
+footer .links svg{width:18px;height:18px;flex:none}
+footer .links a:hover{background:#22304A}
+footer .bot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12px;color:#94A3B8;padding-top:20px}
+@media(max-width:900px){
+ nav .wrap{height:72px}nav ul{gap:20px}
+ .hero .wrap,.grid{grid-template-columns:1fr}
+ .two,.steps .row{grid-template-columns:1fr}
+ .score{flex-direction:column;align-items:flex-start;gap:16px}
+ .ring{flex-direction:column;align-items:flex-start}
+ .bars div{grid-template-columns:110px 1fr 28px}
+}
+@media(max-width:480px){.wrap{padding:0 16px}nav ul li:first-child{display:none}.btn{width:100%;justify-content:center}.btn.sm{width:auto}.panel{padding:16px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+ <a class="logo" href="#top"><i><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></i>ResumeAI</a>
+ <ul><li><a href="#how">How it works</a></li><li><a href="https://github.com/pradipsinh0906-prog/AI-Resume-Reviewer" target="_blank" rel="noopener">GitHub</a></li><li><a href="#contact">Contact</a></li></ul>
+</div></nav>
+
+<header class="hero" id="top"><div class="wrap">
+ <div>
+  <span class="chip">Your next chapter starts here</span>
+  <h1>Check your resume with AI, for free</h1>
+  <p class="sub">Get a score, strengths and improvement tips in 30 seconds.</p>
+  <a class="btn" href="#upload"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg>Upload Resume (PDF)</a>
+  <p class="note">No sign-up. No payment. Just better resumes.</p>
+ </div>
+ <div class="panel"><div class="rep">
+  <div class="top"><div><h4 style="color:var(--ink)">Your resume, reviewed.</h4>EXAMPLE REPORT</div><span class="tag">Analysis complete</span></div>
+  <div class="ring">
+   <div class="dial"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" stroke="#E2E8F0"/><circle cx="50" cy="50" r="44" stroke="#4F46E5" stroke-dasharray="276.5" stroke-dashoffset="60.8"/></svg><div class="num">78<small>/ 100</small></div></div>
+   <div><h5>A strong foundation.</h5><p>A few focused changes can make a big difference.</p><span class="tag">Good start</span></div>
+  </div>
+  <div class="bars">
+   <div>Content quality<span class="bar"><span style="width:86%;background:var(--acc)"></span></span><b>86</b></div>
+   <div>ATS compatibility<span class="bar"><span style="width:74%"></span></span><b>74</b></div>
+   <div>Structure &amp; clarity<span class="bar"><span style="width:75%"></span></span><b>75</b></div>
+  </div>
+ </div></div>
+</div></header>
+
+<section class="main" id="upload"><div class="wrap">
+ <div class="eyebrow">Less guesswork. More confidence.</div>
+ <h2>Your next opportunity starts here.</h2>
+ <p class="lead">Upload your resume and turn feedback into your next step.</p>
+ <div class="grid">
+  <div class="box">
+   <h3>Start with your resume</h3><p class="s">A fresh perspective, in just 30 seconds.</p>
+   <div class="drop" id="drop">
+    <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg></div>
+    <b>Drag &amp; drop your resume</b><small>or choose a file from your computer</small>
+    <button class="btn sm" type="button" id="pick">Choose PDF</button>
+    <small>PDF only · Up to 10 MB</small>
+    <input type="file" id="file" accept="application/pdf,.pdf" hidden>
+   </div>
+   <div class="fname" id="fname" aria-live="polite"></div>
+   <div class="opt"><h4>Tailor it to the role</h4><span>OPTIONAL</span></div>
+   <p class="s" style="margin:4px 0 0">Paste job description for match score</p>
+   <textarea id="jd" placeholder="Paste the role’s responsibilities and requirements here…"></textarea>
+   <button class="btn" id="go" type="button">Analyze my resume</button>
+   <div id="msg" aria-live="polite"></div>
+   <p class="priv">Your resume stays yours. Used only to generate your feedback.</p>
+  </div>
+  <div>
+   <div class="res-h"><h3>Your resume report</h3><span class="badge" id="badge">EXAMPLE RESULTS</span></div>
+   <div class="box score">
+    <div><div class="big"><span id="sc">78</span><small>/ 100</small></div></div>
+    <div style="flex:1;width:100%"><h4 id="hl">Good start. Great potential.</h4><p id="sm">Your experience stands out. Let’s make the impact clearer.</p><div class="bar"><span id="scb" style="width:78%"></span></div></div>
+   </div>
+   <div class="two">
+    <div class="box list"><h4>Strengths</h4><ul id="st"></ul></div>
+    <div class="box list w"><h4>Weaknesses</h4><ul id="wk"></ul></div>
+   </div>
+   <div class="box list"><h4>Suggestions</h4><div class="sug" id="sg"></div></div>
+  </div>
+ </div>
+</div></section>
+
+<section class="steps" id="how"><div class="wrap">
+ <h2>Better feedback. Three simple steps.</h2>
+ <p class="lead" style="margin:0">From upload to actionable advice, without the guesswork.</p>
+ <div class="row">
+  <div><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg></div><h3>1. Upload</h3><p>Drop in your resume as a PDF.<br>No account or payment needed.</p></div>
+  <div><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l2.4 6.6L21 12l-6.6 2.4L12 21l-2.4-6.6L3 12l6.6-2.4z"/></svg></div><h3>2. AI analysis</h3><p>AI reviews your content, structure<br>and role-relevant skills.</p></div>
+  <div><div class="ic"><svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 12l2 2 4-4"/></svg></div><h3>3. Get tips</h3><p>Get your score and practical tips<br>to make your next draft stronger.</p></div>
+ </div>
+</div></section>
+
+<footer id="contact"><div class="wrap">
+ <div class="top">
+  <div><div class="logo">ResumeAI</div><p>Built by Pradipsinh Jadeja, Python &amp; Django Developer</p><div class="m">Made for your next move.</div></div>
+  <div class="links">
+   <a href="https://www.linkedin.com/in/pradipsinh-jadeja/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>LinkedIn</a>
+   <a href="https://github.com/pradipsinh0906-prog/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>GitHub</a>
+   <a href="mailto:pradipsinh0906@gmail.com" id="mail" title="pradipsinh0906@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>Email</a>
+  </div>
+ </div>
+ <div class="bot"><span>ResumeAI · AI-powered resume feedback</span><span>A better resume starts with a little clarity.</span></div>
+</div></footer>
+
+<script>
+// ====== SETTINGS ======
+// Put your backend URL here (e.g. "https://your-app.onrender.com/analyze").
+// Leave empty to see a demo result while the backend is not connected.
+const API_URL = "http://127.0.0.1:8000/analyze";
+// Expected JSON: { score, headline, summary, strengths:[], weaknesses:[], suggestions:[{title,detail}] }
+// ======================
+const $ = id => document.getElementById(id);
+// Email: on desktop open Gmail in a new tab (mailto needs a mail app); phones keep mailto
+$("mail").addEventListener("click", ev => {
+  if(!matchMedia("(pointer:coarse)").matches){
+    ev.preventDefault();
+    window.open("https://mail.google.com/mail/?view=cm&fs=1&to=pradipsinh0906@gmail.com&su=" + encodeURIComponent("Hello from ResumeAI"), "_blank", "noopener");
+  }
+});
+const drop = $("drop"), input = $("file"), msg = $("msg"), go = $("go");
+let file = null;
+
+function say(t, cls){ msg.textContent = t; msg.className = cls || ""; }
+function setFile(f){
+  if(!f) return;
+  if(f.type !== "application/pdf" && !/\.pdf$/i.test(f.name)) return say("Please choose a PDF file.", "err");
+  if(f.size > 10 * 1024 * 1024) return say("This file is over 10 MB. Please choose a smaller PDF.", "err");
+  file = f; $("fname").textContent = f.name; say("");
+}
+$("pick").onclick = () => input.click();
+input.onchange = () => setFile(input.files[0]);
+["dragenter","dragover"].forEach(e => drop.addEventListener(e, ev => { ev.preventDefault(); drop.classList.add("over"); }));
+["dragleave","drop"].forEach(e => drop.addEventListener(e, ev => { ev.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", ev => setFile(ev.dataTransfer.files[0]));
+
+function render(d, label){
+  const s = Math.max(0, Math.min(100, Math.round(d.score)));
+  $("sc").textContent = s; $("scb").style.width = s + "%";
+  $("hl").textContent = d.headline || "Your resume report";
+  $("sm").textContent = d.summary || "";
+  $("st").innerHTML = (d.strengths||[]).map(x => "<li></li>").join("");
+  $("wk").innerHTML = (d.weaknesses||[]).map(x => "<li></li>").join("");
+  [...$("st").children].forEach((li,i)=> li.textContent = d.strengths[i]);
+  [...$("wk").children].forEach((li,i)=> li.textContent = d.weaknesses[i]);
+  $("sg").innerHTML = (d.suggestions||[]).map(() => "<div><i></i><p><b></b><span></span></p></div>").join("");
+  [...$("sg").children].forEach((el,i)=>{
+    const x = d.suggestions[i];
+    el.querySelector("i").textContent = i + 1;
+    el.querySelector("b").textContent = x.title || "";
+    el.querySelector("span").textContent = x.detail || "";
+  });
+  $("badge").textContent = label;
+}
+const demo = {
+  score:78, headline:"Good start. Great potential.", summary:"Your experience stands out. Let’s make the impact clearer.",
+  strengths:["Clear, easy-to-scan structure","Relevant technical skills","Strong education & project sections"],
+  weaknesses:["Few measurable achievements","Some bullet points feel generic","Missing role-specific keywords"],
+  suggestions:[{title:"Quantify your impact",detail:"Add metrics: “Reduced load time by 35%.”"},{title:"Lead with strong verbs",detail:"Replace “Worked on” with “Built”, “Led” or “Improved”."},{title:"Match the language of the role",detail:"Include relevant skills and keywords from the job description."}]
+};
+render(demo, "EXAMPLE RESULTS");
+
+go.onclick = async () => {
+  if(!file) return say("Choose a PDF resume first.", "err");
+  go.disabled = true; go.textContent = "Analyzing…"; say("Reading your resume. This takes about 30 seconds.", "ok");
+  try{
+    let data;
+    if(!API_URL){
+      await new Promise(r => setTimeout(r, 1500));
+      data = demo; say("Demo mode: the backend is not connected yet, so this is sample feedback.", "ok");
+      render(data, "DEMO RESULT");
+    } else {
+      const fd = new FormData();
+      fd.append("resume", file); fd.append("job_description", $("jd").value.trim());
+      const r = await fetch(API_URL, { method:"POST", body:fd });
+      if(!r.ok){
+        let d = ""; try{ d = (await r.json()).detail; }catch(_){}
+        const err = new Error(d || "Server returned " + r.status); err.server = true; throw err;
+      }
+      data = await r.json(); render(data, "YOUR RESULTS"); say("");
+    }
+    document.querySelector(".res-h").scrollIntoView({behavior:"smooth", block:"start"});
+  }catch(e){
+    say(e.server ? e.message : "Could not reach the server. It may be waking up, so wait a minute and try again.", "err");
+  }finally{
+    go.disabled = false; go.textContent = "Analyze my resume";
+  }
+};
+</script>
+</body>
+</html>
