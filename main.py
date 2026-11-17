@@ -10,10 +10,11 @@ from review_chain import review_resume
 
 app = FastAPI(title="ResumeAI API")
 
-# For production, replace ["*"] with your Netlify URL, e.g. ["https://your-site.netlify.app"]
+# Only your website may call this API from a browser.
+# (To test index.html straight from your computer, temporarily use ["*"].)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://resumeai-check.netlify.app"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
