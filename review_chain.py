@@ -37,16 +37,14 @@ Resume:
 {format_instructions}
 
 IMPORTANT: Respond with ONLY the JSON object. Do not include any preamble,
-explanation, markdown code fences, or text before or after the JSON. Keep each
-list to 5 concise bullets, with no more than 20 words per bullet.
+explanation, markdown code fences, or text before or after the JSON.
 """
 )
 
 def get_llm(model_name: str | None = None):
     return ChatGroq(
         model=model_name or os.getenv("GROQ_MODEL", DEFAULT_GROQ_MODEL),
-        temperature=0.3,
-        max_tokens=2048,
+        temperature=0,
         groq_api_key=os.getenv("GROQ_API_KEY"),
     )
 
@@ -97,46 +95,20 @@ def _extract_json(raw_text: str) -> dict:
     except (ValueError, SyntaxError):
         pass
 
-    # Find the first balanced object so braces in prose or nested values do not
-    # make a greedy regex select the wrong range.
-    start = text.find("{")
-    if start >= 0:
-        depth = 0
-        in_string = False
-        escaped = False
-        for index in range(start, len(text)):
-            character = text[index]
-            if in_string:
-                if escaped:
-                    escaped = False
-                elif character == "\\":
-                    escaped = True
-                elif character == '"':
-                    in_string = False
-                continue
-            if character == '"':
-                in_string = True
-            elif character == "{":
-                depth += 1
-            elif character == "}":
-                depth -= 1
-                if depth == 0:
-                    candidate = text[start : index + 1]
-                    try:
-                        return json.loads(candidate)
-                    except json.JSONDecodeError:
-                        try:
-                            parsed = ast.literal_eval(candidate)
-                            if isinstance(parsed, dict):
-                                return parsed
-                        except (ValueError, SyntaxError):
-                            pass
-                    break
+    # Try to find the first {...} block
+    match = re.search(r"\{.*\}", text, re.DOTALL)
+    if match:
+        try:
+            return json.loads(match.group())
+        except json.JSONDecodeError:
+            try:
+                parsed = ast.literal_eval(match.group())
+                if isinstance(parsed, dict):
+                    return parsed
+            except (ValueError, SyntaxError):
+                pass
 
-    raise ValueError(
-        "Could not extract valid JSON from the model response. "
-        f"Response preview: {raw_text[:500]!r}"
-    )
+    raise ValueError(f"Could not extract valid JSON. Raw model output was: {raw_text[:500]!r}")
 
 
 def _normalize_review_result(result: dict) -> dict:
